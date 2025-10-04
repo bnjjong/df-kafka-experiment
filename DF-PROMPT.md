@@ -77,3 +77,6 @@ Build는 Gradle 을 이용함.
 
 ---
 [요청] batch 퍼포먼스 향상을 위한 AdClickLoadTestRunner 수정 요청
+
+---
+[요청] single/batch 10⁶건 테스트 결과 정리 요청
