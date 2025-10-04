@@ -1,4 +1,4 @@
-package id.df.df_kafka_experiment.producer.dto
+package id.df.df_kafka_experiment.api.dto
 
 import org.apache.kafka.clients.producer.RecordMetadata
 

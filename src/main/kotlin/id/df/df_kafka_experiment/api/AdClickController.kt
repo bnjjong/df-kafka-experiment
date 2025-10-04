@@ -1,7 +1,8 @@
-package id.df.df_kafka_experiment.producer
+package id.df.df_kafka_experiment.api
 
-import id.df.df_kafka_experiment.producer.dto.AdClickRequest
-import id.df.df_kafka_experiment.producer.dto.AdClickResponse
+import id.df.df_kafka_experiment.producer.AdClickProducer
+import id.df.df_kafka_experiment.api.dto.AdClickRequest
+import id.df.df_kafka_experiment.api.dto.AdClickResponse
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -29,6 +30,6 @@ class AdClickController(
 
         logger.info("Successfully sent ad click event to topic={}, partition={}, offset={}", metadata.topic(), metadata.partition(), metadata.offset())
 
-        return ResponseEntity.accepted().body(AdClickResponse.from(metadata))
+        return ResponseEntity.accepted().body(AdClickResponse.Companion.from(metadata))
     }
 }
