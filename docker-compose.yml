@@ -1,0 +1,89 @@
+# 초기 작성본에는 `version: "3.8"`을 사용했으나 Compose V2에서는 불필요하여 제거했습니다.
+services:
+  zookeeper:
+    # 초기 제안은 8.1.0 태그였으나 미배포로 인해 사용 가능한 7.6.1로 조정했습니다.
+    image: confluentinc/cp-zookeeper:7.6.1
+    container_name: zookeeper
+    ports:
+      - "2181:2181"                 # 호스트에서 ZK 접속 포트
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181   # ZK 클라이언트 포트
+      ZOOKEEPER_TICK_TIME: 2000     # ZK 하트비트 틱(기본 2s)
+
+  kafka:
+    # Confluent Platform 7.6.1 이미지로 통일 (초기 8.1.0 태그는 미배포)
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: kafka-broker
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"                 # 호스트용 외부 포트(개발자 PC에서 접속)
+      - "29092:29092"               # 도커 네트워크 내부용 포트(컨테이너-컨테이너 통신)
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+
+      # 브로커가 “어떤 주소로 자신을 광고할지” 설정
+      # - 내부용(클러스터/다른 컨테이너): broker:29092
+      # - 외부용(호스트/IDE/테스트클라이언트): localhost:9092 (Mac/Windows는 host.docker.internal 권장)
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker:29092,PLAINTEXT_HOST://localhost:9092
+      # ㅡ 만약 Windows/Mac에서 클라이언트가 도커 내부 접근 문제 있으면 ↓로 교체하세요
+      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker:29092,PLAINTEXT_HOST://host.docker.internal:9092
+
+      # 두 리스너의 보안프로토콜 매핑
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+
+      # 컨트롤러/그룹오프셋/트랜잭션 토픽 복제계수: 단일 노드이므로 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+      # 개발 편의: 자동 토픽 생성
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+      # 브로커 유지/로그 경로 (볼륨 마운트 권장)
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+
+      # (선택) 로컬에서 브로커가 느릴 때 약간 유용한 튜닝
+      # KAFKA_NUM_PARTITIONS: 3
+      # KAFKA_LOG_RETENTION_HOURS: 168
+    volumes:
+      - kafka_data:/var/lib/kafka/data  # 브로커 로그(토픽 데이터) 영속화
+
+  schema-registry:
+    # 7.6.1 이미지 사용 + KRaft 기반 설정과 달리 ZK 없이도 동작하도록 bootstrap.servers 설정 추가
+    image: confluentinc/cp-schema-registry:7.6.1
+    container_name: schema-registry
+    depends_on:
+      - zookeeper
+      - kafka
+    ports:
+      - "8081:8081"                  # REST API 포트
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      # 초기 구성의 `SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL` 대신 부트스트랩 서버를 명시하여 500 오류 해결
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "PLAINTEXT://kafka-broker:29092"
+      SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL: "PLAINTEXT"
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+
+  # (선택) Kafka UI - 토픽/컨슈머 그룹/메시지 브라우징에 매우 편리
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    depends_on:
+      - kafka
+      - schema-registry
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka-broker:29092"
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: "http://schema-registry:8081"
+
+volumes:
+  kafka_data:
+
+networks:
+  default:
+    name: kafka-network
