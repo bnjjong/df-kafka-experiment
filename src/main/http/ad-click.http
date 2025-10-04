@@ -1,0 +1,11 @@
+### 광고 클릭 이벤트를 Kafka로 전송
+POST http://localhost:8090/api/ad-clicks
+Content-Type: application/json
+
+{
+  "audienceId": "aud-123",
+  "inventoryId": "inv-456",
+  "creativeId": "crt-789",
+  "templateId": "tmpl-001",
+  "currentUrl": "https://example.com/landing?page=1"
+}

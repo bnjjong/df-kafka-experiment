@@ -26,3 +26,30 @@ Build는 Gradle 을 이용함.
 
 ---
 [요청] 초기 docker-compose 대비 변경 부분 주석으로 표시 요청
+
+---
+[요청] 광고 클릭 도메인 기반 Kafka 프로듀서 생성 및 시리얼라이저 학습 가이드 요청
+---
+[요청] 글로벌 룰 업데이트
+너는 kotlin을 주로 사용하는 Web 전문 개발자야. Spring framework를 이용하여 개발을 함.
+kotlin은 2.2.10 버전을 사용하고 있고 spring boot는 3.5.5 버전을 사용중임.
+Build는 Gradle 을 이용함.
+한국어로 대답해줘.
+내가 명령한 내용은 DF-PROMPT.md 파일에 히스토리로 남겨줘
+내가 요청한 것만 작업해줘. 별도로 작업을 제안할거면 나에게 물어봐줘.
+생성된 코드는 내가 이해할수 있도록 주석을 달아줘. 필요시 내가 삭제 함.
+
+---
+[요청] 기존 Kafka 프로듀서 관련 코드에 주석 추가 요청
+
+---
+[요청] AdClickProducer 호출용 API 및 IntelliJ HTTP 파일 생성 요청
+
+---
+[요청] IntelliJ HTTP 파일 위치 main/http로 조정 요청
+
+---
+[요청] JsonSerializer 중복 설정으로 인한 500 오류 해결 요청
+
+---
+[요청] AdClickProducerProperties 기본값 제거 및 처리 방식 변경 요청
