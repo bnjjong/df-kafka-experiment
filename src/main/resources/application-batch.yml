@@ -1,0 +1,27 @@
+spring:
+  config:
+    activate:
+      on-profile: batch
+
+ad-clicks:
+  producer:
+    topic: ad-click-events            # 배치 시나리오도 동일 토픽 사용
+    acks: all
+    linger-ms: 50                     # 50ms 동안 배치를 모아 전송량 최적화
+    batch-size: 65536                 # 64KB 배치로 대량 전송 효율 향상
+    compression-type: none            # 압축을 활성화하여 네트워크 사용량 절감 (로컬에서는 오히려 느려짐, 만약~ raw 데이터가 크다면?)
+    enable-idempotence: false         # 재시도 시 중복 방지 (배치 전송에서 안전성 확보) 성능차는 별로 없음 100만건 돌렸을 경우
+  load-test:
+    enabled: true                     # 프로필 활성화 시 동일하게 10만 건 전송
+    total-events: 1000000
+    scenario-label: batch
+
+server:
+  port: 8092
+
+# Completed ad click load test: scenario=batch, totalEvents=1000000, duration=9225 ms
+# Completed ad click load test: scenario=batch, totalEvents=1000000, duration=8564 ms
+# Completed ad click load test: scenario=batch, totalEvents=1000000, duration=8609 ms
+# Completed ad click load test: scenario=batch, totalEvents=1000000, duration=8542 ms
+# Completed ad click load test: scenario=batch, totalEvents=1000000, duration=8292 ms
+# Completed ad click load test: scenario=batch, totalEvents=1000000, duration=8133 ms

@@ -13,7 +13,7 @@ import org.springframework.kafka.core.ProducerFactory
 import org.springframework.kafka.support.serializer.JsonSerializer
 
 @Configuration
-@EnableConfigurationProperties(AdClickProducerProperties::class)
+@EnableConfigurationProperties(value = [AdClickProducerProperties::class, AdClickLoadTestProperties::class])
 class KafkaProducerConfig {
 
     @Bean
@@ -27,7 +27,7 @@ class KafkaProducerConfig {
         props[ProducerConfig.LINGER_MS_CONFIG] = producerProperties.lingerMs
         props[ProducerConfig.BATCH_SIZE_CONFIG] = producerProperties.batchSize
         props[ProducerConfig.COMPRESSION_TYPE_CONFIG] = producerProperties.compressionType
-        props[ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG] = producerProperties.enableIdempotence
+        props[ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG] = producerProperties.enableIdempotenceRequired
 
         // JsonSerializer는 데이터 클래스를 JSON으로 변환하여 전송
         val valueSerializer = JsonSerializer<AdClickEvent>().apply {

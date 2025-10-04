@@ -1,0 +1,24 @@
+spring:
+  config:
+    activate:
+      on-profile: single
+
+ad-clicks:
+  producer:
+    topic: ad-click-events            # 싱글 전송 시나리오에서도 토픽은 동일하게 유지
+    acks: all
+    linger-ms: 0                      # 즉시 전송하여 레이턴시 최소화
+    batch-size: 16384                 # 작은 배치 크기(16KB)로 빠르게 플러시
+    compression-type: none            # 압축 없이 전송하여 CPU 사용량 최소화
+    enable-idempotence: false         # 빠른 전송을 위해 멱등성 비활성화
+  load-test:
+    enabled: true                     # 프로필 활성화 시 10만 건 부하를 자동 수행
+    total-events: 1000000
+    scenario-label: single
+
+server:
+  port: 8091
+# Completed ad click load test: scenario=single, totalEvents=1000000, duration=11505 ms
+# Completed ad click load test: scenario=single, totalEvents=1000000, duration=9150 ms
+# Completed ad click load test: scenario=single, totalEvents=1000000, duration=8788 ms linger-ms 0 -> 10
+# Completed ad click load test: scenario=single, totalEvents=1000000, duration=8763 ms linger-ms 0 -> 20
