@@ -15,7 +15,7 @@ ad-clicks:
     batch-size: 32768           # 배치 전송할 최대 사이즈(바이트)
     compression-type: snappy    # 압축 알고리즘 (gzip, lz4 등으로 교체 가능)
     enable-idempotence: true    # 중복 전송 방지 플래그
-    serializer: spring-json     # spring 기본 JsonSerializer, jackson-object-mapper, kotlinx-json 중 선택
+    serializer: spring-json     # spring-json, jackson-object-mapper, kotlinx-json 중 선택
   load-test:
     enabled: false              # 기본적으로 자동 부하는 비활성화
     total-events: 0             # 프로필에서 override하여 100000 등으로 사용

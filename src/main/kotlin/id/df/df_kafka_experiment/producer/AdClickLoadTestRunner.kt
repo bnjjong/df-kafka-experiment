@@ -57,6 +57,7 @@ class AdClickLoadTestRunner(
         pendingResults.forEachIndexed { idx, future ->
             try {
                 // join()으로 모든 전송이 끝났는지 확인해 실패를 조기에 감지
+                // 순서대로 돌면서 처리 특정 index 지연이 발생할 경우 그 뒤에 future들은 완료가 되어도 대기 해야 함.
                 future.join()
             } catch (ex: CompletionException) {
                 logger.error(
@@ -84,5 +85,8 @@ class AdClickLoadTestRunner(
             totalEvents,
             duration.toMillis()
         )
+
+        // 누적된 직렬화/전송 통계를 즉시 출력해 벤치 결과를 확인할 수 있게 함
+        adClickProducer.logSummary(trigger = "load-test:$scenario")
     }
 }

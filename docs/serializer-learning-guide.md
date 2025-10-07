@@ -35,3 +35,21 @@ Kafka 프로듀서에서 다양한 Serializer 조합을 실험하고 퍼포먼�
 
 ---
 위 실험을 진행하면서 궁금한 설정이나 추가 측정 지표가 필요하면 언제든지 요청해 주세요.
+
+AdClickProducer summary serializer=SPRING_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=181.35 avgDurationMillis=3.436 totalSizeBytes=181347890 totalDurationMillis=3436416.307
+AdClickProducer summary serializer=SPRING_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=181.35 avgDurationMillis=3.030 totalSizeBytes=181347890 totalDurationMillis=3029687.170
+AdClickProducer summary serializer=SPRING_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=181.35 avgDurationMillis=2.956 totalSizeBytes=181347890 totalDurationMillis=2956009.903
+AdClickProducer summary serializer=SPRING_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=181.35 avgDurationMillis=2.947 totalSizeBytes=181347890 totalDurationMillis=2947144.033
+AdClickProducer summary serializer=SPRING_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=181.35 avgDurationMillis=3.019 totalSizeBytes=181347890 totalDurationMillis=3018893.744
+
+AdClickProducer summary serializer=JACKSON_OBJECT_MAPPER trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.34 avgDurationMillis=3.202 totalSizeBytes=190344849 totalDurationMillis=3201744.897
+AdClickProducer summary serializer=JACKSON_OBJECT_MAPPER trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.35 avgDurationMillis=2.795 totalSizeBytes=190345034 totalDurationMillis=2794933.224
+AdClickProducer summary serializer=JACKSON_OBJECT_MAPPER trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.34 avgDurationMillis=2.888 totalSizeBytes=190344880 totalDurationMillis=2888144.269
+AdClickProducer summary serializer=JACKSON_OBJECT_MAPPER trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.34 avgDurationMillis=2.919 totalSizeBytes=190344970 totalDurationMillis=2919462.359
+AdClickProducer summary serializer=JACKSON_OBJECT_MAPPER trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.34 avgDurationMillis=2.993 totalSizeBytes=190344880 totalDurationMillis=2993105.897
+
+AdClickProducer summary serializer=KOTLINX_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.34 avgDurationMillis=2.950 totalSizeBytes=190344928 totalDurationMillis=2950452.538
+AdClickProducer summary serializer=KOTLINX_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.34 avgDurationMillis=2.914 totalSizeBytes=190344872 totalDurationMillis=2913595.245
+AdClickProducer summary serializer=KOTLINX_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.34 avgDurationMillis=2.833 totalSizeBytes=190344857 totalDurationMillis=2832513.247
+AdClickProducer summary serializer=KOTLINX_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.35 avgDurationMillis=2.887 totalSizeBytes=190345020 totalDurationMillis=2886529.231
+AdClickProducer summary serializer=KOTLINX_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.34 avgDurationMillis=2.865 totalSizeBytes=190344908 totalDurationMillis=2865257.177
