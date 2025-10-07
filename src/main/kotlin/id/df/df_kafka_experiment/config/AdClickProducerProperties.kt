@@ -32,6 +32,8 @@ class AdClickProducerProperties {
     @field:NotNull
     var enableIdempotence: Boolean? = null // 중복 전송 방지 플래그
 
+    var serializer: ProducerSerializerType = ProducerSerializerType.SPRING_JSON // 값 직렬화 방식 선택
+
     val enableIdempotenceRequired: Boolean
         get() = requireNotNull(enableIdempotence) { "ad-clicks.producer.enable-idempotence 값이 설정되어야 합니다." }
 
@@ -46,13 +48,14 @@ class AdClickProducerProperties {
         require(batchSize > 0) { "ad-clicks.producer.batch-size 는 0보다 커야 합니다." }
 
         logger.info(
-            "AdClickProducerProperties bound successfully - topic={}, acks={}, lingerMs={}, batchSize={}, compressionType={}, enableIdempotence={}",
+            "AdClickProducerProperties bound successfully - topic={}, acks={}, lingerMs={}, batchSize={}, compressionType={}, enableIdempotence={}, serializer={}",
             topic,
             acks,
             lingerMs,
             batchSize,
             compressionType,
-            enableIdempotence
+            enableIdempotence,
+            serializer
         )
     }
 }

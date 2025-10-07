@@ -1,8 +1,13 @@
 package id.df.df_kafka_experiment.config
 
 import id.df.df_kafka_experiment.domain.AdClickEvent
+import id.df.df_kafka_experiment.serialization.JacksonAdClickEventSerializer
+import id.df.df_kafka_experiment.serialization.KotlinxAdClickEventSerializer
+import kotlinx.serialization.json.Json
 import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.common.serialization.Serializer
 import org.apache.kafka.common.serialization.StringSerializer
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -11,6 +16,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
 import org.springframework.kafka.support.serializer.JsonSerializer
+import com.fasterxml.jackson.databind.ObjectMapper
 
 @Configuration
 @EnableConfigurationProperties(value = [AdClickProducerProperties::class, AdClickLoadTestProperties::class])
@@ -19,7 +25,8 @@ class KafkaProducerConfig {
     @Bean
     fun adClickProducerFactory(
         kafkaProperties: KafkaProperties,
-        producerProperties: AdClickProducerProperties
+        producerProperties: AdClickProducerProperties,
+        @Qualifier("adClickValueSerializer") valueSerializer: Serializer<AdClickEvent>
     ): ProducerFactory<String, AdClickEvent> {
         // Spring Boot가 관리하는 기본 producer 설정을 불러온 뒤 커스텀 옵션 덮어쓰기
         val props = kafkaProperties.buildProducerProperties().toMutableMap()
@@ -28,12 +35,6 @@ class KafkaProducerConfig {
         props[ProducerConfig.BATCH_SIZE_CONFIG] = producerProperties.batchSize
         props[ProducerConfig.COMPRESSION_TYPE_CONFIG] = producerProperties.compressionType
         props[ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG] = producerProperties.enableIdempotenceRequired
-
-        // JsonSerializer는 데이터 클래스를 JSON으로 변환하여 전송
-        val valueSerializer = JsonSerializer<AdClickEvent>().apply {
-            setAddTypeInfo(false) // 헤더에 타입 정보를 넣지 않아 컨슈머가 단순 JSON으로 읽을 수 있게 구성
-        }
-
         return DefaultKafkaProducerFactory(
             props,
             StringSerializer(),
@@ -46,4 +47,26 @@ class KafkaProducerConfig {
         producerFactory: ProducerFactory<String, AdClickEvent>
     ): KafkaTemplate<String, AdClickEvent> = KafkaTemplate(producerFactory)
         // KafkaTemplate은 send() 호출 시 CompletableFuture를 반환해 비동기 결과 확인 가능
+
+    @Bean(name = ["adClickValueSerializer"])
+    fun adClickValueSerializer(
+        producerProperties: AdClickProducerProperties,
+        objectMapper: ObjectMapper,
+        kotlinxJson: Json
+    ): Serializer<AdClickEvent> = when (producerProperties.serializer) {
+        ProducerSerializerType.SPRING_JSON -> JsonSerializer<AdClickEvent>().apply {
+            setAddTypeInfo(false) // 헤더에 타입 정보를 넣지 않아 컨슈머가 단순 JSON으로 읽을 수 있게 구성
+        }
+
+        ProducerSerializerType.JACKSON_OBJECT_MAPPER -> JacksonAdClickEventSerializer(objectMapper.copy())
+
+        ProducerSerializerType.KOTLINX_JSON -> KotlinxAdClickEventSerializer(kotlinxJson)
+    }
+
+    @Bean
+    fun kotlinxJson(): Json = Json {
+        encodeDefaults = true
+        explicitNulls = false
+        ignoreUnknownKeys = false
+    }
 }
