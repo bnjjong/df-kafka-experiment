@@ -19,7 +19,7 @@ class AdClickProducer(
 
     fun send(event: AdClickEvent): CompletableFuture<SendResult<String, AdClickEvent>> {
         val key = event.audienceId // 같은 사용자 이벤트를 한 파티션으로 모으기 위한 메시지 키
-        val startNanos = System.nanoTime()
+        val startNanos = System.nanoTime() // 전송 시작 시각(나노초) - 지속시간 계산용
         return kafkaTemplate.send(properties.topic, key, event) // 비동기로 전송하고 결과 future 반환
             .whenComplete { result, error ->
                 val durationMillis = (System.nanoTime() - startNanos) / 1_000_000.0
@@ -37,7 +37,7 @@ class AdClickProducer(
                 }
 
                 if (result != null) {
-                    val messageSize = result.recordMetadata.serializedValueSize()
+                    val messageSize = result.recordMetadata.serializedValueSize() // 직렬화된 value 바이트 크기
                     logger.info(
                         "Produced AdClickEvent key={} sizeBytes={} durationMillis={} serializer={}",
                         key,

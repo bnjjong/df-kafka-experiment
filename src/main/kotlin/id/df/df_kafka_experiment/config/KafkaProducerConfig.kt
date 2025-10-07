@@ -48,6 +48,7 @@ class KafkaProducerConfig {
     ): KafkaTemplate<String, AdClickEvent> = KafkaTemplate(producerFactory)
         // KafkaTemplate은 send() 호출 시 CompletableFuture를 반환해 비동기 결과 확인 가능
 
+    // 프로듀서 직렬화 전략을 profile/property로 쉽게 바꿀 수 있도록 Bean으로 분리
     @Bean(name = ["adClickValueSerializer"])
     fun adClickValueSerializer(
         producerProperties: AdClickProducerProperties,
@@ -63,6 +64,7 @@ class KafkaProducerConfig {
         ProducerSerializerType.KOTLINX_JSON -> KotlinxAdClickEventSerializer(kotlinxJson)
     }
 
+    // kotlinx.serialization 기반 구현에서 공통 옵션을 재사용하기 위한 Json 인스턴스
     @Bean
     fun kotlinxJson(): Json = Json {
         encodeDefaults = true

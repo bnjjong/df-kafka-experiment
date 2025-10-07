@@ -6,6 +6,7 @@ import kotlinx.serialization.json.Json
 import org.apache.kafka.common.serialization.Serializer
 import kotlin.text.Charsets
 
+// kotlinx.serialization을 활용해 완전한 Kotlin 기반 직렬화 비교군을 제공
 class KotlinxAdClickEventSerializer(
     private val json: Json
 ) : Serializer<AdClickEvent> {
