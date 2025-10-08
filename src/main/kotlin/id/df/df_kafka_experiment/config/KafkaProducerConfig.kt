@@ -1,6 +1,8 @@
 package id.df.df_kafka_experiment.config
 
 import id.df.df_kafka_experiment.domain.AdClickEvent
+import id.df.df_kafka_experiment.serialization.ByteBufferAdClickEventSerializer
+import id.df.df_kafka_experiment.serialization.DataOutputStreamAdClickEventSerializer
 import id.df.df_kafka_experiment.serialization.JacksonAdClickEventSerializer
 import id.df.df_kafka_experiment.serialization.KotlinxAdClickEventSerializer
 import kotlinx.serialization.json.Json
@@ -62,6 +64,10 @@ class KafkaProducerConfig {
         ProducerSerializerType.JACKSON_OBJECT_MAPPER -> JacksonAdClickEventSerializer(objectMapper.copy())
 
         ProducerSerializerType.KOTLINX_JSON -> KotlinxAdClickEventSerializer(kotlinxJson)
+
+        ProducerSerializerType.BYTE_BUFFER -> ByteBufferAdClickEventSerializer()
+
+        ProducerSerializerType.DATA_OUTPUT_STREAM -> DataOutputStreamAdClickEventSerializer()
     }
 
     // kotlinx.serialization 기반 구현에서 공통 옵션을 재사용하기 위한 Json 인스턴스

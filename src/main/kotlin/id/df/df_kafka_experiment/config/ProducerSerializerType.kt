@@ -6,5 +6,7 @@ package id.df.df_kafka_experiment.config
 enum class ProducerSerializerType {
     SPRING_JSON,
     JACKSON_OBJECT_MAPPER,
-    KOTLINX_JSON
+    KOTLINX_JSON,
+    BYTE_BUFFER,
+    DATA_OUTPUT_STREAM
 }

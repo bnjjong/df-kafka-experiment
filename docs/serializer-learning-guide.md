@@ -53,3 +53,7 @@ AdClickProducer summary serializer=KOTLINX_JSON trigger=load-test:batch success=
 AdClickProducer summary serializer=KOTLINX_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.34 avgDurationMillis=2.833 totalSizeBytes=190344857 totalDurationMillis=2832513.247
 AdClickProducer summary serializer=KOTLINX_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.35 avgDurationMillis=2.887 totalSizeBytes=190345020 totalDurationMillis=2886529.231
 AdClickProducer summary serializer=KOTLINX_JSON trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=190.34 avgDurationMillis=2.865 totalSizeBytes=190344908 totalDurationMillis=2865257.177
+
+AdClickProducer summary serializer=BYTE_BUFFER trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=94.35 avgDurationMillis=3.454 totalSizeBytes=94347890 totalDurationMillis=3454257.999
+
+AdClickProducer summary serializer=DATA_OUTPUT_STREAM trigger=load-test:batch success=1000000 failure=0 avgSizeBytes=94.35 avgDurationMillis=4.130 totalSizeBytes=94347890 totalDurationMillis=4130347.944

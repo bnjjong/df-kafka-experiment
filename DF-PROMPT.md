@@ -110,3 +110,6 @@ Build는 Gradle 을 이용함.
 
 ---
 [요청] AdClickLoadTestRunner 배치 동작 문서화 요청
+
+---
+[요청] ByteBuffer/DataOutputStream 직렬화 추가 요청
